@@ -8,8 +8,6 @@ services:
       - "443:443"
     volumes:
       - wordpress_data:/var/www/html
-    links:
-      - wordpress
 
   wordpress:
     build: ./requirements/wordpress
@@ -17,16 +15,25 @@ services:
       - wordpress_data:/var/www/html
     environment:
       - WORDPRESS_DB_HOST=mariadb
-    links:
-      - mariadb
+      - WORDPRESS_DB_USER=joaoper
+      - WORDPRESS_DB_PASSWORD=macaco
+      - WORDPRESS_DB_NAME=inception
 
   mariadb:
     build: ./requirements/mariadb
     volumes:
       - mariadb_data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=coxinha
+      - MYSQL_DATABASE=inception
+      - MYSQL_USER=joaoper
+      - MYSQL_PASSWORD=macaco
 
 volumes:
   wordpress_data:
   mariadb_data:
+
+networks:
+  default:
+    external:
+      name: inception
