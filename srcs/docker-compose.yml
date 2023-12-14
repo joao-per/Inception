@@ -24,7 +24,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=coxinha
+      - MYSQL_ROOT_PASSWORD=coxinha123
       - MYSQL_DATABASE=inception
       - MYSQL_USER=joaoper
       - MYSQL_PASSWORD=macaco

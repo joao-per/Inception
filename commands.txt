@@ -1,0 +1,44 @@
+sudo apt update
+sudo apt upgrade
+sudo apt install docker
+sudo apt install docker-compose
+sudo apt install vim
+sudo apt install docker
+sudo apt install nginx
+
+
+create tree path
+- src
+- - requirements
+- - - nginx
+- - - - Dockerfile
+- - - wordpress
+- - - - Dockerfile
+- - - mariadb
+- - - - Dockerfile
+- - - docker-compose.yml
+
+
+docker ps -- ver todos os containers
+
+# Access the MariaDB container CLI
+docker exec -it [mariadb-container-name] mysql -u root -p
+
+# In the MariaDB CLI, check if the user exists and has the right permissions
+SELECT user FROM mysql.user;
+SHOW GRANTS FOR 'joaoper'@'%';
+
+# If the user does not have the necessary permissions, grant them
+GRANT ALL PRIVILEGES ON inception.* TO 'joaoper'@'%' IDENTIFIED BY 'macaco';
+FLUSH PRIVILEGES;
+
+
+To do this, you'll need to modify your hosts file to point the domain login.42.fr to your localhost (127.0.0.1) or the local IP of your Docker setup. Here's what you should add to your hosts file:
+
+Copy code
+127.0.0.1 login.42.fr
+Or if your Docker environment has a specific IP address, replace 127.0.0.1 with that IP.
+
+On Unix-like systems, the hosts file is located at /etc/hosts,
+
+https://localhost:443
