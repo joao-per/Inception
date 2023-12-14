@@ -1,10 +1,11 @@
 FROM debian:buster
 
 RUN apt-get update && apt-get install -y nginx openssl
-RUN mkdir -p /etc/nginx/ssl
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt \
-    -subj "/C=PT/ST=Lisbon/L=Lisbon/O=42/CN=localhost"
+RUN mkdir -p /etc/nginx/ssl && \
+    openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+    -out /etc/nginx/ssl/joao-per.crt \
+    -keyout /etc/nginx/ssl/joao-per.key \
+    -subj "/C=PT/ST=Lisbon/L=Lisbon/O=42/CN=joao-per.42.fr"
 
 COPY ./config/nginx.conf /etc/nginx/sites-available/default
 
