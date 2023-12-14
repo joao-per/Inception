@@ -7,6 +7,6 @@ RUN mkdir -p /etc/nginx/ssl && \
     -keyout /etc/nginx/ssl/joao-per.key \
     -subj "/C=PT/ST=Lisbon/L=Lisbon/O=42/CN=joao-per.42.fr"
 
-COPY ./config/nginx.conf /etc/nginx/sites-available/default
+COPY ./config/nginx.conf /etc/nginx/conf.d/default.conf
 
 CMD ["nginx", "-g", "daemon off;"]
