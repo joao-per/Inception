@@ -1,39 +1,57 @@
-version: '3'
+version: '3.7'
 
 services:
   nginx:
     build: ./requirements/nginx
+    image: nginx-server
+    depends_on:
+      - wordpress
+    container_name: nginx-server
     ports:
-      - "80:80"
-      - "443:443"
+      - 443:443
+    networks:
+      - inception-network
     volumes:
-      - wordpress_data:/var/www/html
+      - wp-data:/var/www/html/
+    restart: on-failure
 
   wordpress:
+    container_name: wordpress
     build: ./requirements/wordpress
     volumes:
       - wordpress_data:/var/www/html
-    environment:
-      - WORDPRESS_DB_HOST=mariadb
-      - WORDPRESS_DB_USER=joaoper
-      - WORDPRESS_DB_PASSWORD=macaco
-      - WORDPRESS_DB_NAME=inception
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+    restart: on-failure
 
   mariadb:
+    container_name: mariadb
     build: ./requirements/mariadb
+    image: mariadb-database
+    networks:
+      - inception-network
     volumes:
-      - mariadb_data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=coxinha123
-      - MYSQL_DATABASE=inception
-      - MYSQL_USER=joaoper
-      - MYSQL_PASSWORD=macaco
+      - db-data:/var/lib/mysql/
+    env_file:
+      - .env
+    restart: on-failure
 
 volumes:
   wordpress_data:
+    name: wordpress_data
+    driver_opts:
+      type: none
+      device: /home/joao-per/data/wordpress
+      o: bind
   mariadb_data:
+    name: mariadb_data
+    driver_opts:
+      type: none
+      device: /home/joao-per/data/mysql
+      o: bind
 
 networks:
-  default:
-    external:
-      name: inception
+  inception-network:
+    name: inception
