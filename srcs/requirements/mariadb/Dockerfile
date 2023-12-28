@@ -1,3 +1,16 @@
-FROM mariadb:10.5
+FROM debian:bullseye-slim
 
-COPY ./config/my.cnf /etc/mysql/my.cnf
+RUN apt update \
+   && apt install -y mariadb-server
+
+COPY ./config/maria.sh /home
+
+RUN chmod +x /home/maria.sh
+
+RUN mysql_install_db
+
+EXPOSE 3306
+
+ENTRYPOINT ["/home/maria.sh"]
+
+CMD ["mysqld_safe", "--bind-address=0.0.0.0"]
