@@ -1,26 +1,18 @@
-FROM debian:buster
+FROM debian:bullseye-slim
 
-# Update packages and install nginx and openssl
-RUN apt-get update && \
-    apt-get install -y nginx openssl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update\
+    && apt-get install -y nginx openssl\
+    && mkdir -p /var/www/ /etc/nginx/ssl/
 
-# Create SSL directory and generate SSL certificates
-RUN mkdir -p /etc/nginx/ssl && \
-    openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
-    -out /etc/nginx/ssl/joao-per.crt \
-    -keyout /etc/nginx/ssl/joao-per.key \
-    -subj "/C=PT/ST=Lisbon/L=Lisbon/O=42/CN=joao-per.42.fr"
-
-# Copy custom Nginx configuration
-COPY ./config/nginx.conf /etc/nginx/conf.d/default.conf
-
-# Ensure the Nginx PID directory exists
+# store information FastCGI
 RUN mkdir -p /run/nginx
 
-# Expose port 443 for SSL traffic
-EXPOSE 443
+RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+       -out /etc/nginx/ssl/joao-per.crt \
+       -keyout /etc/nginx/ssl/joao-per.key \
+       -subj "/C=PT/ST=Lisboa/L=Lisboa/O=42Lisboa/OU=joao-per/CN=localhost/"
 
-# Start Nginx in the foreground
+COPY ./config/nginx_config.conf /etc/nginx/conf.d
+
 CMD ["nginx", "-g", "daemon off;"]
+
