@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye-slim
 
 # Install required packages
 RUN apt-get update && apt-get install -y \
@@ -21,20 +21,21 @@ RUN wget https://wordpress.org/latest.tar.gz \
     && rm -rf wordpress latest.tar.gz
 
 
-# Ensure permissions are set
-# Change the ownership of the WordPress files to the www-data user, which is the user PHP-FPM runs as.
-RUN chown -R www-data:www-data /var/www/html
+# Install WordPress CLI (WP-CLI) for command-line WordPress management.
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
-# Create directory for PHP-FPM run files
-# /run/php is created because PHP-FPM expects a directory to store its runtime files, including the PID file. It may not be present in a minimal base image.
-RUN mkdir /run/php
+# This directory is required for creating the php7.4-fpm.pid file
+RUN mkdir /run/php/ && chmod 755 /run/php/
 
-# Expose the port PHP-FPM is reachable on
-# PHP-FPM listens on port 9000 by default, so I expose that port to the host.
+# Update the 'listen' configuration in www.conf to use a network socket (0.0.0.0:9000)
+RUN sed -i 's+listen = /run/php/php7.4-fpm.sock+listen = 9000+g' /etc/php/7.4/fpm/pool.d/www.conf
+
+COPY ./tools/wp_install_config.sh /home
+RUN chmod +x /home/wp_install_config.sh
+
 EXPOSE 9000
 
-# Configure entrypoint and cmd
-COPY ./tools/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["php-fpm7.3", "-F"]
+ENTRYPOINT ["/home/wp_conf.sh"]
+
+CMD ["php-fpm7.4", "-F", "-R"]
