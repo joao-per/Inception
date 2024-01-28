@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "Starting MariaDB..."
 if [ ! -d "/var/lib/mysql/$DB_NAME" ]; then
 
 service mariadb start
@@ -35,3 +36,4 @@ fi
 echo "Done"
 
 exec "$@"
+
