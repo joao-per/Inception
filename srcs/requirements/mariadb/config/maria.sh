@@ -7,6 +7,7 @@ service mariadb start
 
 sleep 1
 
+echo "Configuring MariaDB..."
 mysql_secure_installation << END
 
 Y
@@ -17,7 +18,8 @@ Y
 Y
 Y
 END
-
+echo "MariaDB configured"
+echo "Creating database $DB_NAME..."
     sleep 1
     mysql -u root -e "CREATE DATABASE $DB_NAME;"
     mysql -u root -e "CREATE USER '$DB_ADMIN'@'%' IDENTIFIED BY '$DB_PASS';"
@@ -30,7 +32,7 @@ END
 
 else
     sleep 1
-    echo "Already configured"
+    echo "The database $DB_NAME already exists."
 fi
 
 echo "Done"

@@ -10,7 +10,7 @@ services:
     ports:
       - 443:443
     networks:
-      - inception-network
+      - inception-net
     volumes:
       - wordpress_data:/var/www/html/
     restart: on-failure
@@ -22,7 +22,7 @@ services:
     volumes:
       - wordpress_data:/var/www/html
     networks:
-      - inception-network
+      - inception-net
     ports:
       - 9000
     env_file:
@@ -36,7 +36,7 @@ services:
     build: ./requirements/mariadb
     image: mariadb
     networks:
-      - inception-network
+      - inception-net
     volumes:
       - mariadb_data:/var/lib/mysql/
     env_file:
@@ -48,15 +48,15 @@ volumes:
     name: wordpress_data
     driver_opts:
       type: none
-      device: /mnt/c/Users/jonat/data/wordpress
+      device: /home/joao-per/data/wordpress
       o: bind
   mariadb_data:
     name: mariadb_data
     driver_opts:
       type: none
-      device: /mnt/c/Users/jonat/data/mysql
+      device: /home/joao-per/data/mysql
       o: bind
 
 networks:
-  inception-network:
+  inception-net:
     name: inception

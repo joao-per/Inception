@@ -7,6 +7,7 @@ COPY ./config/maria.sh /home
 
 RUN chmod +x /home/maria.sh
 
+# Initialize the database
 RUN mysql_install_db
 
 EXPOSE 3306
