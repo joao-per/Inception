@@ -1,9 +1,11 @@
 FROM debian:bullseye-slim
 
-RUN apt update \
-   && apt install -y mariadb-server
+RUN apt update
+RUN apt install -y mariadb-server
 
 COPY ./config/maria.sh /home
+
+RUN ls -la /home
 
 RUN chmod +x /home/maria.sh
 

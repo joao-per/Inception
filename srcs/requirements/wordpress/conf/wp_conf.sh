@@ -64,17 +64,17 @@ if [ ! -e "$conf_file" ]; then
         if [ $command -eq 0 ]; then
             echo "Downloading Wordpress..."
             wp_download
-            ((command+=$?))
+            ((command+=1))
         fi
         if [ $command -eq 1 ]; then
             echo "Configuring Wordpress..."
             wp_config
-            ((command+=$?))
+            ((command+=1))
         fi
         if [ $command -eq 2 ]; then
             echo "Installing Wordpress..."
             wp_install
-            ((command+=$?))
+            ((command+=1))
         fi
         if [ $command -ge 3 ]; then
             break
