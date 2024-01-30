@@ -22,7 +22,7 @@ Inception is a robust project designed to create a fully dockerized web environm
 
 ## Installation and Setup 📈
 
-1. Clone the repository: `git clone <repo-link>`
+1. Clone the repository: `git clone https://github.com/joao-per/Inception.git`
 2. Change localhost to joao-per.42.fr in `/etc/hosts` file
 3. Build and launch the containers: `docker-compose up --build`
 4. Access the website at: `https://joao-per.42.fr`
