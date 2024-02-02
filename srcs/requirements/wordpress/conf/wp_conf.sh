@@ -1,8 +1,6 @@
 #!/bin/bash
 
-sleep 3
-
-conf_file="/var/www/html/wp-config.php"
+sleep 2
 
 wp_download()
 {
@@ -50,51 +48,17 @@ wp_install()
     fi
 }
 
-# This section of the shell script checks if the file specified by the variable `` exists.
-if [ ! -e "$conf_file" ]; then
+# Check if the wp-config.php file exists
+if [ ! -e "/var/www/html/wp-config.php" ]; then
+    echo "Downloading Wordpress..."
+    wp_download
+    echo "Configuring Wordpress..."
+    wp_config
+    echo "Installing Wordpress..."
+    wp_install
+    wp theme install twentynineteen --activate
+    sleep 1
 
-    command=0
-    attempts=0
-    max_attempts=5
-    
-    cd /var/www/html/
-
-    while [ $attempts -le $max_attempts ]; do
-
-        if [ $command -eq 0 ]; then
-            echo "Downloading Wordpress..."
-            wp_download
-            ((command+=1))
-        fi
-        if [ $command -eq 1 ]; then
-            echo "Configuring Wordpress..."
-            wp_config
-            ((command+=1))
-        fi
-        if [ $command -eq 2 ]; then
-            echo "Installing Wordpress..."
-            wp_install
-            ((command+=1))
-        fi
-        if [ $command -ge 3 ]; then
-            break
-        fi
-
-        # install a theme
-        wp theme install twentynineteen --activate
-        
-        ((attempts+=1))
-
-        sleep 1
-
-    done
-    
-    if [ $attempts -ge $max_attempts ]; then
-        echo "Failed to install Wordpress"
-    else
-        echo "Wordpress installed successfully"
-    fi
-  
 else
     echo "Wordpress already installed"
 fi

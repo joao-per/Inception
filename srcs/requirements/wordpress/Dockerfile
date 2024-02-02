@@ -19,13 +19,12 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
-# This directory is required for creating the php7.4-fpm.pid file
+# This will be the location for the socket file
 RUN mkdir /run/php/ && chmod 755 /run/php/
 
-# Update the 'listen' configuration in www.conf to use a network socket (0.0.0.0:9000)
+# Change the default port for php-fpm
 RUN sed -i 's+listen = /run/php/php7.4-fpm.sock+listen = 9000+g' /etc/php/7.4/fpm/pool.d/www.conf
 
-# Copy the configuration file for php-fpm
 COPY ./conf/wp_conf.sh /home
 RUN chmod +x /home/wp_conf.sh
 
