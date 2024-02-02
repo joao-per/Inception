@@ -79,6 +79,10 @@ if [ ! -e "$conf_file" ]; then
         if [ $command -ge 3 ]; then
             break
         fi
+
+        # install a theme
+        wp theme install twentynineteen --activate
+        
         ((attempts+=1))
 
         sleep 1

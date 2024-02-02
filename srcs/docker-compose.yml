@@ -23,8 +23,6 @@ services:
       - wordpress_data:/var/www/html
     networks:
       - inception-net
-    ports:
-      - 9000
     env_file:
       - .env
     depends_on:
